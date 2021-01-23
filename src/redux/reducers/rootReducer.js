@@ -6,7 +6,7 @@ import favoritesReducer from './favoritesReducer'
 import queryReducer from './queryReducer'
 
 const persistConfig = {
-    key: 'root',
+    key: 'favemovies',
     storage,
     whitelist: [ 'favorites']
 }
