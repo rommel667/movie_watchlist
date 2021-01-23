@@ -1,8 +1,11 @@
 const initialState = {
     movies: [],
     movieDetails: null,
+    recommendations: [],
     queryType: '',
-    loading: false
+    loading: false,
+    page: 0,
+    totalPages: 0
 }
 
 const queryReducer = (state = initialState, action) => {
@@ -12,7 +15,9 @@ const queryReducer = (state = initialState, action) => {
                 ...state,
                 movies: action.payload.movies,
                 queryType: action.payload.queryType,
-                loading: false
+                loading: false,
+                page: action.payload.page,
+                totalPages: action.payload.totalPages
             }
         case "QUERY_STARTS":
             return {
@@ -22,7 +27,22 @@ const queryReducer = (state = initialState, action) => {
         case "MOVIE_DETAILS":
             return {
                 ...state,
-                movieDetails: action.payload,
+                movieDetails: action.payload.movieDetails,
+                recommendations: action.payload.recommendations,
+                loading: false
+            }
+        case "PREVIOUS_PAGE":
+            return {
+                ...state,
+                page: state.page - 1,
+                movies: action.payload.movies,
+                loading: false
+            }
+        case "NEXT_PAGE":
+            return {
+                ...state,
+                page: state.page + 1,
+                movies: action.payload.movies,
                 loading: false
             }
         default:

@@ -12,7 +12,7 @@ const favoritesReducer = (state = initialState, action) => {
             }
         case "REMOVE_FROM_FAVORITES":
             const prevArray2 = state.favoriteMovies
-            const newArray = prevArray2.filter(movie => movie !== action.payload)
+            const newArray = prevArray2.filter(movie => movie.id !== action.payload)
             return {
                 ...state,
                 favoriteMovies: [ ...newArray ]

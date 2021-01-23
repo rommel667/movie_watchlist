@@ -14,7 +14,7 @@ const Favorites = () => {
 
     return (
         <Container style={{ padding: "16px" }}>
-            <h1>Favorites</h1>
+            <h3>Favorites</h3>
             {loading ?
                 <Button variant="primary" disabled>
                     <Spinner

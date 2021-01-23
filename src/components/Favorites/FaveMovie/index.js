@@ -1,9 +1,13 @@
-import React from 'react'
-import { Card, Button } from 'react-bootstrap'
+import React, { useState } from 'react'
+import { Card, Button, Image, Fade, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { FaTimesCircle } from "react-icons/fa";
+import "./style.css"
 
 const FaveMovie = ({ movie }) => {
+
+    const [ hoverMovieId, setHoverMovieId ] = useState("")
 
     const history = useHistory()
 
@@ -18,7 +22,7 @@ const FaveMovie = ({ movie }) => {
             const recommendationsDB = await fetch(`https://api.themoviedb.org/3/movie/${id}/similar?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
             const recommendations = await recommendationsDB.json()
             console.log("RECS",recommendations);
-            dispatch({ type: "MOVIE_DETAILS", payload: details  })
+            dispatch({ type: "MOVIE_DETAILS", payload: { movieDetails: details, recommendations: recommendations }  })
         } catch (error) {
             console.log(error);
         }
@@ -29,14 +33,27 @@ const FaveMovie = ({ movie }) => {
     }
 
     return (
-        <Card style={{ flex: 1, marginBottom: "16px" }}>
-        <Card.Img variant="top" height={330} src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`} />
+        <Card className="card-image" onMouseLeave={() => setHoverMovieId('')} onMouseOver={() => setHoverMovieId(movie.id)} style={{ flex: 1, marginBottom: "16px", position: "relative" }}>
+
+<OverlayTrigger
+      placement="bottom-end"
+      overlay={
+        <Tooltip>
+          Remove from Favorites
+        </Tooltip>
+      }
+    >
+      <FaTimesCircle onClick={() => removeToFavoritesHandler(movie.id)} size={22} color="white" style={{ position: "absolute", cursor: "pointer", top: "1%", left: "90%", display: hoverMovieId === movie.id ? "" : "none" }} />
+    </OverlayTrigger>
+
+
+        
+
+        <Button style={{ position: "absolute", top: "35%", width: "80%", marginLeft: "10%", display: hoverMovieId === movie.id ? "" : "none" }} size="lg"  onClick={() => showDetails(movie.id)} variant="info">Show Details</Button>
+
+        <Card.Img variant="top" height={330} src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}/>
             <Card.Body>
                 <Card.Title>{movie.title}</Card.Title>
-                <div style={{display: "flex", gap: 10}}>
-                <Button size="sm" onClick={() => removeToFavoritesHandler(movie)} variant="primary">Remove from Favorites</Button> 
-                <Button size="sm" onClick={() => showDetails(movie.id)} variant="primary">Show Details</Button>
-                </div>
             </Card.Body>
         </Card>
     )

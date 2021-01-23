@@ -1,0 +1,15 @@
+.button-outline:focus {
+    outline: none !important;
+    box-shadow: none !important;
+
+}
+
+.card-image {
+    position: relative;
+    transition: transform .5s; /* Animation */
+    margin: 0 auto;
+  }
+
+.card-image:hover {
+    transform: scale(1.05);
+}
