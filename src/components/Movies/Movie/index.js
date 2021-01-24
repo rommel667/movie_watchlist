@@ -43,7 +43,7 @@ const Movie = ({ movie }) => {
     }
 
     return (
-        <Zoom duration={2000}>
+        <Zoom duration={1500}>
         <Card onMouseLeave={() => setHoverMovieId('')} onMouseOver={() => setHoverMovieId(movie.id)} className="card-image" style={{ flex: 1, marginBottom: "16px", height: "40%" }}>
 
             {favorites.some(mov => mov.id === movie.id) &&
@@ -57,7 +57,7 @@ const Movie = ({ movie }) => {
             {movie.poster_path ? <Card.Img variant="top" height={330} src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`} /> :
                 <Card.Img variant="top" height={330} src={noImage} />}
             <Card.Body>
-                <h5 style={{ textDecoration: "underline" }}>{movie.title}</h5>
+                <h5 onClick={() => showDetails(movie.id)} style={{ textDecoration: "underline", cursor: "pointer" }}>{movie.title}</h5>
 
             </Card.Body>
         </Card>

@@ -13,7 +13,7 @@ const Movies = () => {
     const history = useHistory()
 
     useEffect(() => {
-        if(queryType === "") {
+        if (queryType === "") {
             history.replace("/")
             return
         }
@@ -46,7 +46,7 @@ const Movies = () => {
     }
 
     const previousPageHandler = async () => {
-        if(page === 1) return
+        if (page === 1) return
         try {
             dispatch({ type: "QUERY_STARTS" })
             if (queryType === "Search Results") {
@@ -68,14 +68,14 @@ const Movies = () => {
                 const movies = await fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=${page - 1}`)
                 const data = await movies.json()
                 dispatch({ type: "PREVIOUS_PAGE", payload: { movies: data.results } })
-            }  
+            }
         } catch (error) {
             console.log(error);
         }
     }
 
     const nextPageHandler = async () => {
-        if(page === totalPages) return
+        if (page === totalPages) return
         try {
             dispatch({ type: "QUERY_STARTS" })
             if (queryType === "Search Results") {
@@ -100,7 +100,7 @@ const Movies = () => {
                 const data = await movies.json()
                 console.log("DATA", data);
                 dispatch({ type: "NEXT_PAGE", payload: { movies: data.results } })
-            }  
+            }
         } catch (error) {
             console.log(error);
         }
@@ -108,7 +108,7 @@ const Movies = () => {
 
 
     return (
-       
+
         <Container style={{ padding: "16px" }}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <h3>{queryType}</h3>
@@ -133,12 +133,13 @@ const Movies = () => {
                     })}
 
                 </Row>}
-                <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+                {!loading &&
                 <div style={{ display: "flex", gap: "5px" }}>
                     <FaChevronCircleLeft style={{ cursor: "pointer" }} onClick={previousPageHandler} size={30} />
                     <p>Page {page}/{totalPages}</p>
                     <FaChevronCircleRight style={{ cursor: "pointer" }} onClick={nextPageHandler} size={30} />
-                </div>
+                </div>}
             </div>
         </Container>
     )

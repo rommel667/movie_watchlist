@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Image, Button, Spinner, Container, Badge, Row, Col } from 'react-bootstrap'
 import { useMedia } from 'react-use-media'
 import './style.css'
+import Divider from '../UI/Divider'
 
 const MovieDetails = () => {
 
@@ -77,6 +78,7 @@ const MovieDetails = () => {
                 <Button className="button-outline" onClick={() => addToFavoritesHandler(movieDetails)} variant="outline-primary">Add to Favorites</Button>}
             </div> 
             </div>
+            <Divider />
             <div style={{ marginTop: "24px" }}>
                 <h4>Similar Movies:</h4>
             </div>
@@ -87,7 +89,7 @@ const MovieDetails = () => {
                         return
                     } else {
                         return (
-                            <Col lg={2} xs={6} md={3}>
+                            <Col style={{ display: "flex", alignItems: "center", justifyContent: "center" }} lg={2} xs={6} md={3}>
                             <Image onClick={() => showDetails(movie.id)} style={{cursor: 'pointer', marginBottom: "10px"}} key={movie.id} width={160} src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`} rounded />
                             </Col>
                             
