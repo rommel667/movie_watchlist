@@ -17,15 +17,25 @@ const Header = () => {
 
     const matches = useMedia('(min-width: 768px)');
 
+
     const searchHandler = async (e) => {
         e.preventDefault()
+        if(title === "") return
         try {
-            history.push('/search')
-            dispatch({ type: "QUERY_STARTS" })
-            const movies = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1&include_adult=false&query=${title}`)
-            const data = await movies.json()
-            dispatch({ type: "QUERY_RESULTS", payload: { queryType: "Search Results", movies: data.results, page: data.page, totalPages: data.total_pages, searchTitle: title } })
-            setTitle("")
+            if (queryType === "Search Results") {
+                history.push('/search')
+                dispatch({ type: "QUERY_STARTS" })
+                const movies = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1&include_adult=false&query=${title}`)
+                const data = await movies.json()
+                dispatch({ type: "SEARCH_REQUERY_RESULTS", payload: { movies: data.results, page: data.page, totalPages: data.total_pages, queryType: "Search Results", searchTitle: title } })
+                setTitle("")
+            } else {
+                history.push('/search')
+                dispatch({ type: "QUERY_STARTS" })
+                dispatch({ type: "QUERY_TYPE_AND_SEARCH_TITLE", payload: { queryType: "Search Results", searchTitle: title } })
+                setTitle("")
+            }
+
         } catch (error) {
             console.log(error);
         }
@@ -68,7 +78,7 @@ const Header = () => {
 
     return (
         <Navbar bg="dark" variant="dark">
-            <Navbar.Brand style={{ display: "flex", alignItems: "center" }} as={Link} to="/"><FaFilm size={30} style={{marginRight: "5px"}}/>{matches && "MyWatchlist"}</Navbar.Brand>
+            <Navbar.Brand style={{ display: "flex", alignItems: "center" }} as={Link} to="/"><FaFilm size={30} style={{ marginRight: "5px" }} />{matches && "MyWatchlist"}</Navbar.Brand>
             <Nav className="mr-auto">
                 <Nav.Link as={Link} to="/">Favorites</Nav.Link>
                 <NavDropdown title="Movies" id="basic-nav-dropdown">

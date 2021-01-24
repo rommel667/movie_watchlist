@@ -18,6 +18,14 @@ const queryReducer = (state = initialState, action) => {
                 loading: false,
                 page: action.payload.page,
                 totalPages: action.payload.totalPages,
+            }
+        case "SEARCH_REQUERY_RESULTS":
+            return {
+                ...state,
+                movies: action.payload.movies,
+                loading: false,
+                page: action.payload.page,
+                totalPages: action.payload.totalPages,
                 searchTitle: action.payload.searchTitle
             }
         case "QUERY_STARTS":
@@ -29,6 +37,12 @@ const queryReducer = (state = initialState, action) => {
             return {
                 ...state,
                 queryType: action.payload
+            }
+        case "QUERY_TYPE_AND_SEARCH_TITLE":
+            return {
+                ...state,
+                queryType: action.payload.queryType,
+                searchTitle: action.payload.searchTitle
             }
         case "MOVIE_DETAILS":
             return {

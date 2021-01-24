@@ -22,6 +22,11 @@ const Movies = () => {
 
     const fetchMovies = async () => {
         try {
+            if (queryType === "Search Results") {
+                const movies = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1&include_adult=false&query=${searchTitle}`)
+                const data = await movies.json()
+                dispatch({ type: "QUERY_RESULTS", payload: { movies: data.results, page: data.page, totalPages: data.total_pages } })
+            }
             if (queryType === "Latest Movies") {
                 const movies = await fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
                 const data = await movies.json()
