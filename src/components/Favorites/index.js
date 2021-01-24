@@ -28,10 +28,8 @@ const Favorites = () => {
             dispatch({ type: "QUERY_STARTS" })
             const movie = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`)
             const details = await movie.json()
-            console.log("DETAILS", details);
             const recommendationsDB = await fetch(`https://api.themoviedb.org/3/movie/${id}/similar?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
             const recommendations = await recommendationsDB.json()
-            console.log("RECS", recommendations);
             dispatch({ type: "MOVIE_DETAILS", payload: { movieDetails: details, recommendations: recommendations } })
         } catch (error) {
             console.log(error);
@@ -45,7 +43,6 @@ const Favorites = () => {
         try {
             const movies = await fetch(`https://api.themoviedb.org/3/movie/${randomId}/recommendations?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
             const data = await movies.json()
-            console.log("RECS2",data);
             setFaveRecommendations(data.results)
         } catch (error) {
             console.log(error);
@@ -85,7 +82,7 @@ const Favorites = () => {
                                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                                     <Row style={{ display: "flex", justifyContent: "center", alignItems: 'center' }}>
                                         {faveRecommendations.map((movie, index) => {
-                                            if (favorites.some(mov => mov.id === movie.id)) {
+                                            if (favorites.some(mov => mov.id === movie.id || !movie.poster_path)) {
                                                 return
                                             } else {
                                                 return (

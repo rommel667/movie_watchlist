@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Image } from 'react-bootstrap'
+import { Navbar, Nav, NavDropdown, Form, FormControl, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useHistory } from 'react-router-dom'
 import { useMedia } from 'react-use-media'
@@ -38,7 +38,6 @@ const Header = () => {
                 if (queryType === "Latest Movies") {
                     const movies = await fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
                     const data = await movies.json()
-                    console.log(queryType, data);
                     dispatch({ type: "QUERY_RESULTS", payload: { movies: data.results, page: data.page, totalPages: data.total_pages } })
                 } else {
                     dispatch({ type: "QUERY_TYPE", payload: "Latest Movies" })
@@ -48,7 +47,6 @@ const Header = () => {
                 if (queryType === "Popular Movies") {
                     const movies = await fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
                     const data = await movies.json()
-                    console.log(queryType, data);
                     dispatch({ type: "QUERY_RESULTS", payload: { movies: data.results, page: data.page, totalPages: data.total_pages } })
                 } else {
                     dispatch({ type: "QUERY_TYPE", payload: "Popular Movies" })
@@ -58,7 +56,6 @@ const Header = () => {
                 if (queryType === "Upcoming Movies") {
                     const movies = await fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
                     const data = await movies.json()
-                    console.log(queryType, data);
                     dispatch({ type: "QUERY_RESULTS", payload: { movies: data.results, page: data.page, totalPages: data.total_pages } })
                 } else {
                     dispatch({ type: "QUERY_TYPE", payload: "Upcoming Movies" })

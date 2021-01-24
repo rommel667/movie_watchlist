@@ -25,10 +25,8 @@ const InitialPage = () => {
             dispatch({ type: "QUERY_STARTS" })
             const movie = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`)
             const details = await movie.json()
-            console.log("DETAILS", details);
             const recommendationsDB = await fetch(`https://api.themoviedb.org/3/movie/${id}/similar?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
             const recommendations = await recommendationsDB.json()
-            console.log("RECS", recommendations);
             dispatch({ type: "MOVIE_DETAILS", payload: { movieDetails: details, recommendations: recommendations } })
         } catch (error) {
             console.log(error);
@@ -39,7 +37,6 @@ const InitialPage = () => {
         try {
             const movies = await fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
             const data = await movies.json()
-            console.log("RECS2",data);
             setInitialRecommendations(data.results)
         } catch (error) {
             console.log(error);

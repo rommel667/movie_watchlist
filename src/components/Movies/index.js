@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Button, Spinner, Container, Row, Col, CardDeck, Card } from 'react-bootstrap'
+import { Spinner, Container, Row, Col } from 'react-bootstrap'
 import Movie from './Movie'
 import { FaChevronCircleLeft, FaChevronCircleRight } from "react-icons/fa";
-import { Redirect, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const Movies = () => {
 
@@ -25,19 +25,16 @@ const Movies = () => {
             if (queryType === "Latest Movies") {
                 const movies = await fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
                 const data = await movies.json()
-                console.log(queryType, data);
                 dispatch({ type: "QUERY_RESULTS", payload: { movies: data.results, page: data.page, totalPages: data.total_pages } })
             }
             if (queryType === "Popular Movies") {
                 const movies = await fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
                 const data = await movies.json()
-                console.log(queryType, data);
                 dispatch({ type: "QUERY_RESULTS", payload: { movies: data.results, page: data.page, totalPages: data.total_pages } })
             }
             if (queryType === "Upcoming Movies") {
                 const movies = await fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
                 const data = await movies.json()
-                console.log(queryType, data);
                 dispatch({ type: "QUERY_RESULTS", payload: { movies: data.results, page: data.page, totalPages: data.total_pages } })
             }
         } catch (error) {

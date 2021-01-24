@@ -1,17 +1,12 @@
 import React from 'react'
 import './App.css';
-import { Switch, Route, Redirect } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-
+import { Switch, Route } from 'react-router-dom'
 import Header from './components/Header'
 import Favorites from './components/Favorites';
 import Movies from './components/Movies';
 import MovieDetails from './components/MovieDetails';
 
 function App() {
-
-  const { queryType, movies } = useSelector(state => state.query)
-
   return (
     <div className="App">
       <Header />

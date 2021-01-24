@@ -21,7 +21,6 @@ const MovieDetails = () => {
             const details = await movie.json()
             const recommendationsDB = await fetch(`https://api.themoviedb.org/3/movie/${id}/similar?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
             const recommendations = await recommendationsDB.json()
-            console.log("RECS2",recommendations);
             dispatch({ type: "MOVIE_DETAILS", payload: { movieDetails: details, recommendations: recommendations }  })
         } catch (error) {
             console.log(error);
