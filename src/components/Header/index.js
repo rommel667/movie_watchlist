@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
-import { Navbar, Nav, NavDropdown, Form, FormControl, Button } from 'react-bootstrap'
-import { useDispatch } from 'react-redux'
+import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Image } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useHistory } from 'react-router-dom'
 import { useMedia } from 'react-use-media'
 import { FaSearch } from "react-icons/fa";
+import { FaFilm } from "react-icons/fa";
 
 const Header = () => {
 
     const [title, setTitle] = useState('')
 
     const dispatch = useDispatch()
+    const queryType = useSelector(state => state.query.queryType)
 
     const history = useHistory()
 
@@ -22,35 +24,46 @@ const Header = () => {
             dispatch({ type: "QUERY_STARTS" })
             const movies = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1&include_adult=false&query=${title}`)
             const data = await movies.json()
-            dispatch({ type: "QUERY_RESULTS", payload: { queryType: "Search Results", movies: data.results, page: data.page, totalPages: data.total_pages }  })
+            dispatch({ type: "QUERY_RESULTS", payload: { queryType: "Search Results", movies: data.results, page: data.page, totalPages: data.total_pages, searchTitle: title } })
             setTitle("")
         } catch (error) {
             console.log(error);
         }
     }
 
-    const fetchMovies = async (queryType) => {
+    const fetchMovies = async (query) => {
         try {
             dispatch({ type: "QUERY_STARTS" })
-            if (queryType === "latest") {
-                const movies = await fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
-                const data = await movies.json()
-                console.log(queryType, data);
-                dispatch({ type: "QUERY_RESULTS", payload: { queryType: "Latest Movies", movies: data.results, page: data.page, totalPages: data.total_pages } })
+            if (query === "latest") {
+                if (queryType === "Latest Movies") {
+                    const movies = await fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
+                    const data = await movies.json()
+                    console.log(queryType, data);
+                    dispatch({ type: "QUERY_RESULTS", payload: { movies: data.results, page: data.page, totalPages: data.total_pages } })
+                } else {
+                    dispatch({ type: "QUERY_TYPE", payload: "Latest Movies" })
+                }
             }
-            if (queryType === "popular") {
-                const movies = await fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
-                const data = await movies.json()
-                console.log(queryType, data);
-                dispatch({ type: "QUERY_RESULTS", payload: { queryType: "Popular Movies", movies: data.results, page: data.page, totalPages: data.total_pages } })
+            if (query === "popular") {
+                if (queryType === "Popular Movies") {
+                    const movies = await fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
+                    const data = await movies.json()
+                    console.log(queryType, data);
+                    dispatch({ type: "QUERY_RESULTS", payload: { movies: data.results, page: data.page, totalPages: data.total_pages } })
+                } else {
+                    dispatch({ type: "QUERY_TYPE", payload: "Popular Movies" })
+                }
             }
-            if (queryType === "upcoming") {
-                const movies = await fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
-                const data = await movies.json()
-                console.log(queryType, data);
-                dispatch({ type: "QUERY_RESULTS", payload: { queryType: "Upcoming Movies", movies: data.results, page: data.page, totalPages: data.total_pages } })
+            if (query === "upcoming") {
+                if (queryType === "Upcoming Movies") {
+                    const movies = await fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
+                    const data = await movies.json()
+                    console.log(queryType, data);
+                    dispatch({ type: "QUERY_RESULTS", payload: { movies: data.results, page: data.page, totalPages: data.total_pages } })
+                } else {
+                    dispatch({ type: "QUERY_TYPE", payload: "Upcoming Movies" })
+                }
             }
-            
         } catch (error) {
             console.log(error);
         }
@@ -58,7 +71,7 @@ const Header = () => {
 
     return (
         <Navbar bg="dark" variant="dark">
-            {matches && <Navbar.Brand as={Link} to="/">MyWatchlist</Navbar.Brand>}
+            <Navbar.Brand style={{ display: "flex", alignItems: "center" }} as={Link} to="/"><FaFilm size={30} style={{marginRight: "5px"}}/>{matches && "MyWatchlist"}</Navbar.Brand>
             <Nav className="mr-auto">
                 <Nav.Link as={Link} to="/">Favorites</Nav.Link>
                 <NavDropdown title="Movies" id="basic-nav-dropdown">
@@ -68,11 +81,11 @@ const Header = () => {
                 </NavDropdown>
             </Nav>
 
-            <Form  onSubmit={searchHandler} inline>
-            <div style={{ display: "flex", flexDirection: "row" }}>
-                <FormControl value={title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Search movie" className="mr-sm-2" />
-                {matches ? <Button onClick={searchHandler} variant="outline-info">Search</Button> :
-                <Button style={{ marginLeft: "5px" }} onClick={searchHandler} variant="outline-info"><FaSearch /></Button>}
+            <Form onSubmit={searchHandler} inline>
+                <div style={{ display: "flex", flexDirection: "row" }}>
+                    <FormControl value={title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Search movie" className="mr-sm-2" />
+                    {matches ? <Button onClick={searchHandler} variant="outline-info">Search</Button> :
+                        <Button style={{ marginLeft: "5px" }} onClick={searchHandler} variant="outline-info"><FaSearch /></Button>}
                 </div>
             </Form>
 

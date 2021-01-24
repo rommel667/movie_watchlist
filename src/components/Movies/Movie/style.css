@@ -1,7 +1,10 @@
+.button-outline {
+    border-radius: 20px !important;
+}
+
 .button-outline:focus {
     outline: none !important;
     box-shadow: none !important;
-
 }
 
 .card-image {

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Container, Button, Spinner, Col, Row } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import FaveMovie from './FaveMovie'
+import InitialPage from './InitialPage'
 
 const Favorites = () => {
 
@@ -14,7 +15,7 @@ const Favorites = () => {
 
     return (
         <Container style={{ padding: "16px" }}>
-            <h3>Favorites</h3>
+            {favorites.length > 0 && <h3>Favorites</h3>}
             {loading ?
                 <Button variant="primary" disabled>
                     <Spinner
@@ -26,7 +27,8 @@ const Favorites = () => {
                     />
                 Loading...
             </Button> :
-               
+                <>
+                {favorites.length === 0 ? <InitialPage/> :
                     <Row style={{ display: "flex", justifyContent: "center", alignItems: 'center' }}>
                         {favorites.map(movie => {
                             return (
@@ -36,11 +38,11 @@ const Favorites = () => {
                             )
                         })}
 
-                    </Row>
-               
+                    </Row>}
+                </>
             }
         </Container>
-        
+
     )
 }
 

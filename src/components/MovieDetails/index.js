@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Image, Button, Spinner, Container, Badge } from 'react-bootstrap'
+import { Image, Button, Spinner, Container, Badge, Row, Col } from 'react-bootstrap'
+import { useMedia } from 'react-use-media'
 import './style.css'
 
 const MovieDetails = () => {
@@ -8,6 +9,8 @@ const MovieDetails = () => {
     const { movieDetails, loading, recommendations } = useSelector(state => state.query)
     const favorites = useSelector(state => state.favorites.favoriteMovies)
     const dispatch = useDispatch()
+
+    const matches = useMedia('(min-width: 768px)');
 
     const showDetails = async (id) => {
         try {
@@ -39,7 +42,7 @@ const MovieDetails = () => {
                 <Spinner animation="border" variant="primary" />
                 </div> :
             <div>
-            <div style={{ display: 'flex', flexDirection: "row" }}>
+            <div style={{ display: 'flex', flexDirection: matches ? "row" : "column" }}>
             <Image width={300} src={`https://image.tmdb.org/t/p/original/${movieDetails.poster_path}`} rounded />
             <div style={{ marginLeft: "16px" }}>
                 <h2>{movieDetails.title}</h2>
@@ -69,7 +72,7 @@ const MovieDetails = () => {
                 
                 <p style={{ marginTop: "24px" }}>Summary: {movieDetails.overview}</p>
                 
-                <p>Rating: {movieDetails.vote_average}/10</p>
+                <p style={{ marginTop: "24px", fontWeight: "bold" }}>Rating: {movieDetails.vote_average}/10</p>
                 {favorites.some(mov => mov.id === movieDetails.id) ? <Button className="button-outline" onClick={() => removeToFavoritesHandler(movieDetails.id)} variant="outline-danger">Remove from Favorites</Button> :
                 <Button className="button-outline" onClick={() => addToFavoritesHandler(movieDetails)} variant="outline-primary">Add to Favorites</Button>}
             </div> 
@@ -78,14 +81,21 @@ const MovieDetails = () => {
                 <h4>Similar Movies:</h4>
             </div>
             <div style={{ display:"flex", justifyContent: "space-between" }}>
+            <Row style={{ display: "flex", justifyContent: "center", alignItems: 'center' }}>
                 {recommendations.results.length > 0 ? recommendations?.results.map((movie, index) => {
-                    if(index >= 10) {
+                    if(index >= 12) {
                         return
                     } else {
-                        return <Image onClick={() => showDetails(movie.id)} style={{cursor: 'pointer'}} key={movie.id} width={100} src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`} rounded />
+                        return (
+                            <Col lg={2} xs={6} md={3}>
+                            <Image onClick={() => showDetails(movie.id)} style={{cursor: 'pointer', marginBottom: "10px"}} key={movie.id} width={160} src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`} rounded />
+                            </Col>
+                            
+                        )  
                     }
                    
                 }): <h5>No similar movies found</h5>}
+                </Row>
             </div>
             </div>
             }
