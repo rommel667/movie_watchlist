@@ -12,10 +12,7 @@ function App() {
       <Header />
       <Switch>
         <Route exact path="/" component={Favorites} />
-        <Route path="/latest" component={Movies} />
-        <Route path="/popular" component={Movies} />
-        <Route path="/upcoming" component={Movies} />
-        <Route path="/search" component={Movies} />
+        <Route path="/movies" component={Movies} />
         <Route path="/details" component={MovieDetails} />
       </Switch>
     </div>

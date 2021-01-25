@@ -23,14 +23,14 @@ const Header = () => {
         if(title === "") return
         try {
             if (queryType === "Search Results") {
-                history.push('/search')
+                history.push('/movies')
                 dispatch({ type: "QUERY_STARTS" })
                 const movies = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1&include_adult=false&query=${title}`)
                 const data = await movies.json()
                 dispatch({ type: "SEARCH_REQUERY_RESULTS", payload: { movies: data.results, page: data.page, totalPages: data.total_pages, queryType: "Search Results", searchTitle: title } })
                 setTitle("")
             } else {
-                history.push('/search')
+                history.push('/movies')
                 dispatch({ type: "QUERY_STARTS" })
                 dispatch({ type: "QUERY_TYPE_AND_SEARCH_TITLE", payload: { queryType: "Search Results", searchTitle: title } })
                 setTitle("")
@@ -82,9 +82,9 @@ const Header = () => {
             <Nav className="mr-auto">
                 <Nav.Link as={Link} to="/">Favorites</Nav.Link>
                 <NavDropdown title="Movies" id="basic-nav-dropdown">
-                    <NavDropdown.Item onClick={() => fetchMovies("latest")} as={Link} to="/latest">Latest</NavDropdown.Item>
-                    <NavDropdown.Item onClick={() => fetchMovies("popular")} as={Link} to="/popular">Popular</NavDropdown.Item>
-                    <NavDropdown.Item onClick={() => fetchMovies("upcoming")} as={Link} to="/upcoming">Upcoming</NavDropdown.Item>
+                    <NavDropdown.Item onClick={() => fetchMovies("latest")} as={Link} to="/movies">Latest</NavDropdown.Item>
+                    <NavDropdown.Item onClick={() => fetchMovies("popular")} as={Link} to="/movies">Popular</NavDropdown.Item>
+                    <NavDropdown.Item onClick={() => fetchMovies("upcoming")} as={Link} to="/movies">Upcoming</NavDropdown.Item>
                 </NavDropdown>
             </Nav>
 
